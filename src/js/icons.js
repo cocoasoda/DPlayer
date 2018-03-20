@@ -16,22 +16,22 @@ import subtitle from '../assets/subtitle.svg';
 import loading from '../assets/loading.svg';
 
 const Icons = {
-    play: play,
-    pause: pause,
-    volumeUp: volumeUp,
-    volumeDown: volumeDown,
-    volumeOff: volumeOff,
-    full: full,
-    fullWeb: fullWeb,
-    setting: setting,
-    right: right,
-    comment: comment,
-    commentOff: commentOff,
-    send: send,
-    pallette: pallette,
-    camera: camera,
-    subtitle: subtitle,
-    loading: loading,
+  play: play,
+  pause: pause,
+  volumeUp: volumeUp,
+  volumeDown: volumeDown,
+  volumeOff: volumeOff,
+  full: full,
+  fullWeb: fullWeb,
+  setting: setting,
+  right: right,
+  comment: comment,
+  commentOff: commentOff,
+  send: send,
+  pallette: pallette,
+  camera: camera,
+  subtitle: subtitle,
+  loading: loading,
 };
 
 export default Icons;

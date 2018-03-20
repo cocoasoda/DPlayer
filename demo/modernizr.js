@@ -22,12 +22,12 @@
  * of control over the experience.
 */
 
-;(function(window, document, undefined){
-  var classes = [];
-  
+(function (window, document, undefined) {
+  const classes = [];
 
-  var tests = [];
-  
+
+  const tests = [];
+
 
   /**
    *
@@ -37,7 +37,7 @@
    * @access public
    */
 
-  var ModernizrProto = {
+  const ModernizrProto = {
     // The current version, dummy
     _version: '3.5.0',
 
@@ -54,40 +54,39 @@
     _q: [],
 
     // Stub these for people who are listening
-    on: function(test, cb) {
+    on: function (test, cb) {
       // I don't really think people should do this, but we can
       // safe guard it a bit.
       // -- NOTE:: this gets WAY overridden in src/addTest for actual async tests.
       // This is in case people listen to synchronous tests. I would leave it out,
       // but the code to *disallow* sync tests in the real version of this
       // function is actually larger than this.
-      var self = this;
-      setTimeout(function() {
+      const self = this;
+      setTimeout(function () {
         cb(self[test]);
       }, 0);
     },
 
-    addTest: function(name, fn, options) {
+    addTest: function (name, fn, options) {
       tests.push({name: name, fn: fn, options: options});
     },
 
-    addAsyncTest: function(fn) {
+    addAsyncTest: function (fn) {
       tests.push({name: null, fn: fn});
     }
   };
 
-  
 
   // Fake some of Object.create so we can force non test results to be non "own" properties.
-  var Modernizr = function() {};
+  let Modernizr = function () {};
   Modernizr.prototype = ModernizrProto;
 
   // Leak modernizr globally when you `require` it rather than force it here.
   // Overwrite name so constructor name is nicer :D
   Modernizr = new Modernizr();
 
-  
-/*!
+
+  /*!
 {
   "name": "SVG",
   "property": "svg",
@@ -105,14 +104,14 @@
     "fabricjs"
   ]
 }
-!*/
-/* DOC
+! */
+  /* DOC
 Detects support for SVG in `<embed>` or `<object>` elements.
 */
 
   Modernizr.addTest('svg', !!document.createElementNS && !!document.createElementNS('http://www.w3.org/2000/svg', 'svg').createSVGRect);
 
-/*!
+  /*!
 {
   "name": "WebSockets Support",
   "property": "websockets",
@@ -137,15 +136,15 @@ Detects support for SVG in `<embed>` or `<object>` elements.
     "datachannel"
   ]
 }
-!*/
+! */
 
-  var supports = false;
+  let supports = false;
   try {
     supports = 'WebSocket' in window && window.WebSocket.CLOSING === 2;
   } catch (e) {}
   Modernizr.addTest('websockets', supports);
 
-/*!
+  /*!
 {
   "name": "Local Storage",
   "property": "localstorage",
@@ -162,7 +161,7 @@ Detects support for SVG in `<embed>` or `<object>` elements.
     "yui-cacheoffline"
   ]
 }
-!*/
+! */
 
   // In FF4, if disabled, window.localStorage should === null.
 
@@ -184,8 +183,8 @@ Detects support for SVG in `<embed>` or `<object>` elements.
   //   www.quirksmode.org/dom/html5.html
   // But IE8 doesn't support either with local files
 
-  Modernizr.addTest('localstorage', function() {
-    var mod = 'modernizr';
+  Modernizr.addTest('localstorage', function () {
+    const mod = 'modernizr';
     try {
       localStorage.setItem(mod, mod);
       localStorage.removeItem(mod);
@@ -209,7 +208,7 @@ Detects support for SVG in `<embed>` or `<object>` elements.
   function is(obj, type) {
     return typeof obj === type;
   }
-  ;
+
 
   /**
    * Run through all tests and detect their support in the current UA.
@@ -218,15 +217,15 @@ Detects support for SVG in `<embed>` or `<object>` elements.
    */
 
   function testRunner() {
-    var featureNames;
-    var feature;
-    var aliasIdx;
-    var result;
-    var nameIdx;
-    var featureName;
-    var featureNameSplit;
+    let featureNames;
+    let feature;
+    let aliasIdx;
+    let result;
+    let nameIdx;
+    let featureName;
+    let featureNameSplit;
 
-    for (var featureIdx in tests) {
+    for (const featureIdx in tests) {
       if (tests.hasOwnProperty(featureIdx)) {
         featureNames = [];
         feature = tests[featureIdx];
@@ -279,7 +278,7 @@ Detects support for SVG in `<embed>` or `<object>` elements.
       }
     }
   }
-  ;
+
 
   /**
    * docElement is a convenience wrapper to grab the root element of the document
@@ -288,9 +287,9 @@ Detects support for SVG in `<embed>` or `<object>` elements.
    * @returns {HTMLElement|SVGElement} The root element of the document
    */
 
-  var docElement = document.documentElement;
-  
-/*!
+  const docElement = document.documentElement;
+
+  /*!
 {
   "name": "Document Fragment",
   "property": "documentfragment",
@@ -308,12 +307,12 @@ Detects support for SVG in `<embed>` or `<object>` elements.
   "knownBugs": ["false-positive on Blackberry 9500, see QuirksMode note"],
   "tags": []
 }
-!*/
-/* DOC
+! */
+  /* DOC
 Append multiple elements to the DOM within a single insertion.
 */
 
-  Modernizr.addTest('documentfragment', function() {
+  Modernizr.addTest('documentfragment', function () {
     return 'createDocumentFragment' in document &&
       'appendChild' in docElement;
   });
@@ -326,8 +325,8 @@ Append multiple elements to the DOM within a single insertion.
    * @returns {boolean}
    */
 
-  var isSVG = docElement.nodeName.toLowerCase() === 'svg';
-  
+  const isSVG = docElement.nodeName.toLowerCase() === 'svg';
+
 
   /**
    * setClasses takes an array of class names and adds them to the root element
@@ -340,8 +339,8 @@ Append multiple elements to the DOM within a single insertion.
   // Pass in an and array of class names, e.g.:
   //  ['no-webp', 'borderradius', ...]
   function setClasses(classes) {
-    var className = docElement.className;
-    var classPrefix = Modernizr._config.classPrefix || '';
+    let className = docElement.className;
+    const classPrefix = Modernizr._config.classPrefix || '';
 
     if (isSVG) {
       className = className.baseVal;
@@ -350,7 +349,7 @@ Append multiple elements to the DOM within a single insertion.
     // Change `no-js` to `js` (independently of the `enableClasses` option)
     // Handle classPrefix on this too
     if (Modernizr._config.enableJSClass) {
-      var reJS = new RegExp('(^|\\s)' + classPrefix + 'no-js(\\s|$)');
+      const reJS = new RegExp('(^|\\s)' + classPrefix + 'no-js(\\s|$)');
       className = className.replace(reJS, '$1' + classPrefix + 'js$2');
     }
 
@@ -366,7 +365,6 @@ Append multiple elements to the DOM within a single insertion.
 
   }
 
-  ;
 
   /**
    * createElement is a convenience wrapper around document.createElement. Since we
@@ -391,8 +389,8 @@ Append multiple elements to the DOM within a single insertion.
     }
   }
 
-  ;
-/*!
+
+  /*!
 {
   "name": "Canvas",
   "property": "canvas",
@@ -400,20 +398,20 @@ Append multiple elements to the DOM within a single insertion.
   "tags": ["canvas", "graphics"],
   "polyfills": ["flashcanvas", "excanvas", "slcanvas", "fxcanvas"]
 }
-!*/
-/* DOC
+! */
+  /* DOC
 Detects support for the `<canvas>` element for 2D drawing.
 */
 
   // On the S60 and BB Storm, getContext exists, but always returns undefined
   // so we actually have to call getContext() to verify
   // github.com/Modernizr/Modernizr/issues/issue/97/
-  Modernizr.addTest('canvas', function() {
-    var elem = createElement('canvas');
+  Modernizr.addTest('canvas', function () {
+    const elem = createElement('canvas');
     return !!(elem.getContext && elem.getContext('2d'));
   });
 
-/*!
+  /*!
 {
   "name": "HTML5 Video",
   "property": "video",
@@ -431,8 +429,8 @@ Detects support for the `<canvas>` element for 2D drawing.
     "videoforeverybody"
   ]
 }
-!*/
-/* DOC
+! */
+  /* DOC
 Detects support for the video element, as well as testing what types of content it supports.
 
 Subproperties are provided to describe support for `ogg`, `h264` and `webm` formats, e.g.:
@@ -450,13 +448,13 @@ Modernizr.video.ogg     // 'probably'
   //   It was live in FF3.5.0 and 3.5.1, but fixed in 3.5.2
   //   It was also live in Safari 4.0.0 - 4.0.4, but fixed in 4.0.5
 
-  Modernizr.addTest('video', function() {
-    var elem = createElement('video');
-    var bool = false;
+  Modernizr.addTest('video', function () {
+    const elem = createElement('video');
+    let bool = false;
 
     // IE9 Running on Windows Server SKU can cause an exception to be thrown, bug #224
     try {
-      bool = !!elem.canPlayType
+      bool = !!elem.canPlayType;
       if (bool) {
         bool = new Boolean(bool);
         bool.ogg = elem.canPlayType('video/ogg; codecs="theora"').replace(/^no$/, '');
@@ -475,7 +473,7 @@ Modernizr.video.ogg     // 'probably'
     return bool;
   });
 
-/*!
+  /*!
 {
   "name": "a[download] Attribute",
   "property": "adownload",
@@ -487,14 +485,14 @@ Modernizr.video.ogg     // 'probably'
     "href": "https://developers.whatwg.org/links.html#downloading-resources"
   }]
 }
-!*/
-/* DOC
+! */
+  /* DOC
 When used on an `<a>`, this attribute signifies that the resource it points to should be downloaded by the browser rather than navigating to it.
 */
 
   Modernizr.addTest('adownload', !window.externalHost && 'download' in createElement('a'));
 
-/*!
+  /*!
 {
   "name": "canvas.toDataURL type support",
   "property": ["todataurljpeg", "todataurlpng", "todataurlwebp"],
@@ -506,19 +504,19 @@ When used on an `<a>`, this attribute signifies that the resource it points to s
     "href": "https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement.toDataURL"
   }]
 }
-!*/
+! */
 
 
-  var canvas = createElement('canvas');
+  const canvas = createElement('canvas');
 
-  Modernizr.addTest('todataurljpeg', function() {
+  Modernizr.addTest('todataurljpeg', function () {
     return !!Modernizr.canvas && canvas.toDataURL('image/jpeg').indexOf('data:image/jpeg') === 0;
   });
-  Modernizr.addTest('todataurlpng', function() {
+  Modernizr.addTest('todataurlpng', function () {
     return !!Modernizr.canvas && canvas.toDataURL('image/png').indexOf('data:image/png') === 0;
   });
-  Modernizr.addTest('todataurlwebp', function() {
-    var supports = false;
+  Modernizr.addTest('todataurlwebp', function () {
+    let supports = false;
 
     // firefox 3 throws an error when you use an "invalid" toDataUrl
     try {
@@ -529,7 +527,7 @@ When used on an `<a>`, this attribute signifies that the resource it points to s
   });
 
 
-/*!
+  /*!
 {
   "name": "Track element and Timed Text Track",
   "property": ["texttrackapi", "track"],
@@ -545,9 +543,9 @@ When used on an `<a>`, this attribute signifies that the resource it points to s
   }],
   "warnings": ["While IE10 has implemented the track element, IE10 does not expose the underlying APIs to create timed text tracks by JS (really sad)"]
 }
-!*/
+! */
 
-  Modernizr.addTest('texttrackapi', typeof (createElement('video').addTextTrack) === 'function');
+  Modernizr.addTest('texttrackapi', typeof createElement('video').addTextTrack === 'function');
 
   // a more strict test for track including UI support: document.createElement('track').kind === 'subtitles'
   Modernizr.addTest('track', 'kind' in createElement('track'));
@@ -564,11 +562,11 @@ When used on an `<a>`, this attribute signifies that the resource it points to s
    */
 
   function cssToDOM(name) {
-    return name.replace(/([a-z])-([a-z])/g, function(str, m1, m2) {
+    return name.replace(/([a-z])-([a-z])/g, function (str, m1, m2) {
       return m1 + m2.toUpperCase();
     }).replace(/^-/, '');
   }
-  ;
+
 
   /**
    * If the browsers follow the spec, then they would expose vendor-specific styles as:
@@ -586,12 +584,12 @@ When used on an `<a>`, this attribute signifies that the resource it points to s
    * @returns {string} The string representing the vendor-specific style properties
    */
 
-  var omPrefixes = 'Moz O ms Webkit';
-  
+  const omPrefixes = 'Moz O ms Webkit';
 
-  var cssomPrefixes = (ModernizrProto._config.usePrefixes ? omPrefixes.split(' ') : []);
+
+  const cssomPrefixes = ModernizrProto._config.usePrefixes ? omPrefixes.split(' ') : [];
   ModernizrProto._cssomPrefixes = cssomPrefixes;
-  
+
 
   /**
    * atRule returns a given CSS property at-rule (eg @keyframes), possibly in
@@ -620,10 +618,10 @@ When used on an `<a>`, this attribute signifies that the resource it points to s
    *
    */
 
-  var atRule = function(prop) {
-    var length = prefixes.length;
-    var cssrule = window.CSSRule;
-    var rule;
+  const atRule = function (prop) {
+    const length = prefixes.length;
+    const cssrule = window.CSSRule;
+    let rule;
 
     if (typeof cssrule === 'undefined') {
       return undefined;
@@ -643,10 +641,10 @@ When used on an `<a>`, this attribute signifies that the resource it points to s
       return '@' + prop;
     }
 
-    for (var i = 0; i < length; i++) {
+    for (let i = 0; i < length; i++) {
       // prefixes gives us something like -o-, and we want O_
-      var prefix = prefixes[i];
-      var thisRule = prefix.toUpperCase() + '_' + rule;
+      const prefix = prefixes[i];
+      const thisRule = prefix.toUpperCase() + '_' + rule;
 
       if (thisRule in cssrule) {
         return '@-' + prefix.toLowerCase() + '-' + prop;
@@ -658,7 +656,6 @@ When used on an `<a>`, this attribute signifies that the resource it points to s
 
   ModernizrProto.atRule = atRule;
 
-  
 
   /**
    * List of JavaScript DOM values used for tests
@@ -678,9 +675,8 @@ When used on an `<a>`, this attribute signifies that the resource it points to s
    * ```
    */
 
-  var domPrefixes = (ModernizrProto._config.usePrefixes ? omPrefixes.toLowerCase().split(' ') : []);
+  const domPrefixes = ModernizrProto._config.usePrefixes ? omPrefixes.toLowerCase().split(' ') : [];
   ModernizrProto._domPrefixes = domPrefixes;
-  
 
 
   /**
@@ -697,7 +693,6 @@ When used on an `<a>`, this attribute signifies that the resource it points to s
     return !!~('' + str).indexOf(substr);
   }
 
-  ;
 
   /**
    * fnBind is a super small [bind](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind) polyfill.
@@ -710,12 +705,11 @@ When used on an `<a>`, this attribute signifies that the resource it points to s
    */
 
   function fnBind(fn, that) {
-    return function() {
+    return function () {
       return fn.apply(that, arguments);
     };
   }
 
-  ;
 
   /**
    * testDOMProps is a generic DOM property test; if a browser supports
@@ -729,9 +723,9 @@ When used on an `<a>`, this attribute signifies that the resource it points to s
    * @returns {false|*} returns false if the prop is unsupported, otherwise the value that is supported
    */
   function testDOMProps(props, obj, elem) {
-    var item;
+    let item;
 
-    for (var i in props) {
+    for (const i in props) {
       if (props[i] in obj) {
 
         // return the property name as a string
@@ -754,7 +748,6 @@ When used on an `<a>`, this attribute signifies that the resource it points to s
     return false;
   }
 
-  ;
 
   /**
    * Create our "modernizr" element that we do most feature tests on.
@@ -762,28 +755,26 @@ When used on an `<a>`, this attribute signifies that the resource it points to s
    * @access private
    */
 
-  var modElem = {
+  const modElem = {
     elem: createElement('modernizr')
   };
 
   // Clean up this element
-  Modernizr._q.push(function() {
+  Modernizr._q.push(function () {
     delete modElem.elem;
   });
 
-  
 
-  var mStyle = {
+  const mStyle = {
     style: modElem.elem.style
   };
 
   // kill ref for gc, must happen before mod.elem is removed, so we unshift on to
   // the front of the queue.
-  Modernizr._q.unshift(function() {
+  Modernizr._q.unshift(function () {
     delete mStyle.style;
   });
 
-  
 
   /**
    * domToCSS takes a camelCase string and converts it to kebab-case
@@ -796,11 +787,10 @@ When used on an `<a>`, this attribute signifies that the resource it points to s
    */
 
   function domToCSS(name) {
-    return name.replace(/([A-Z])/g, function(str, m1) {
+    return name.replace(/([A-Z])/g, function (str, m1) {
       return '-' + m1.toLowerCase();
     }).replace(/^ms-/, '-ms-');
   }
-  ;
 
 
   /**
@@ -815,11 +805,11 @@ When used on an `<a>`, this attribute signifies that the resource it points to s
    */
 
   function computedStyle(elem, pseudo, prop) {
-    var result;
+    let result;
 
     if ('getComputedStyle' in window) {
       result = getComputedStyle.call(window, elem, pseudo);
-      var console = window.console;
+      const console = window.console;
 
       if (result !== null) {
         if (prop) {
@@ -827,7 +817,7 @@ When used on an `<a>`, this attribute signifies that the resource it points to s
         }
       } else {
         if (console) {
-          var method = console.error ? 'error' : 'log';
+          const method = console.error ? 'error' : 'log';
           console[method].call(console, 'getComputedStyle returning null, its possible modernizr test results are inaccurate');
         }
       }
@@ -838,7 +828,6 @@ When used on an `<a>`, this attribute signifies that the resource it points to s
     return result;
   }
 
-  ;
 
   /**
    * getBody returns the body of a document, or an element that can stand in for
@@ -852,7 +841,7 @@ When used on an `<a>`, this attribute signifies that the resource it points to s
 
   function getBody() {
     // After page load injecting a fake body doesn't work so check if body exists
-    var body = document.body;
+    let body = document.body;
 
     if (!body) {
       // Can't use the real body create a fake one.
@@ -863,7 +852,6 @@ When used on an `<a>`, this attribute signifies that the resource it points to s
     return body;
   }
 
-  ;
 
   /**
    * injectElementWithStyles injects an element with style element and some CSS rules
@@ -878,13 +866,13 @@ When used on an `<a>`, this attribute signifies that the resource it points to s
    */
 
   function injectElementWithStyles(rule, callback, nodes, testnames) {
-    var mod = 'modernizr';
-    var style;
-    var ret;
-    var node;
-    var docOverflow;
-    var div = createElement('div');
-    var body = getBody();
+    const mod = 'modernizr';
+    let style;
+    let ret;
+    let node;
+    let docOverflow;
+    const div = createElement('div');
+    const body = getBody();
 
     if (parseInt(nodes, 10)) {
       // In order not to give false positives we create a node for each test
@@ -913,9 +901,9 @@ When used on an `<a>`, this attribute signifies that the resource it points to s
     div.id = mod;
 
     if (body.fake) {
-      //avoid crashing IE8, if background image is used
+      // avoid crashing IE8, if background image is used
       body.style.background = '';
-      //Safari 5.13/5.1.4 OSX stops loading if ::-webkit-scrollbar is used and scrollbars are visible
+      // Safari 5.13/5.1.4 OSX stops loading if ::-webkit-scrollbar is used and scrollbars are visible
       body.style.overflow = 'hidden';
       docOverflow = docElement.style.overflow;
       docElement.style.overflow = 'hidden';
@@ -938,7 +926,6 @@ When used on an `<a>`, this attribute signifies that the resource it points to s
 
   }
 
-  ;
 
   /**
    * nativeTestProps allows for us to use native feature detection functionality if available.
@@ -954,7 +941,7 @@ When used on an `<a>`, this attribute signifies that the resource it points to s
   // Accepts a list of property names and a single value
   // Returns `undefined` if native detection not available
   function nativeTestProps(props, value) {
-    var i = props.length;
+    let i = props.length;
     // Start with the JS API: http://www.w3.org/TR/css3-conditional/#the-css-interface
     if ('CSS' in window && 'supports' in window.CSS) {
       // Try every prefixed variant of the property
@@ -968,18 +955,18 @@ When used on an `<a>`, this attribute signifies that the resource it points to s
     // Otherwise fall back to at-rule (for Opera 12.x)
     else if ('CSSSupportsRule' in window) {
       // Build a condition string for every prefixed variant
-      var conditionText = [];
+      let conditionText = [];
       while (i--) {
         conditionText.push('(' + domToCSS(props[i]) + ':' + value + ')');
       }
       conditionText = conditionText.join(' or ');
-      return injectElementWithStyles('@supports (' + conditionText + ') { #modernizr { position: absolute; } }', function(node) {
+      return injectElementWithStyles('@supports (' + conditionText + ') { #modernizr { position: absolute; } }', function (node) {
         return computedStyle(node, null, 'position') == 'absolute';
       });
     }
     return undefined;
   }
-  ;
+
 
   // testProps is a generic CSS / DOM property test.
 
@@ -999,14 +986,14 @@ When used on an `<a>`, this attribute signifies that the resource it points to s
 
     // Try native detect first
     if (!is(value, 'undefined')) {
-      var result = nativeTestProps(props, value);
+      const result = nativeTestProps(props, value);
       if (!is(result, 'undefined')) {
         return result;
       }
     }
 
     // Otherwise do it properly
-    var afterInit, i, propsLength, prop, before;
+    let afterInit, i, propsLength, prop, before;
 
     // If we don't have a style element, that means we're running async or after
     // the core tests, so we'll need to create our own elements to use
@@ -1015,7 +1002,7 @@ When used on an `<a>`, this attribute signifies that the resource it points to s
     // defined for valid tags. Therefore, if `modernizr` does not have one, we
     // fall back to a less used element and hope for the best.
     // for strict XHTML browsers the hardly used samp element is used
-    var elems = ['modernizr', 'tspan', 'samp'];
+    const elems = ['modernizr', 'tspan', 'samp'];
     while (!mStyle.style && elems.length) {
       afterInit = true;
       mStyle.modElem = createElement(elems.shift());
@@ -1073,7 +1060,6 @@ When used on an `<a>`, this attribute signifies that the resource it points to s
     return false;
   }
 
-  ;
 
   /**
    * testPropsAll tests a list of DOM properties we want to check against.
@@ -1092,7 +1078,7 @@ When used on an `<a>`, this attribute signifies that the resource it points to s
    */
   function testPropsAll(prop, prefixed, elem, value, skipValueTest) {
 
-    var ucProp = prop.charAt(0).toUpperCase() + prop.slice(1),
+    let ucProp = prop.charAt(0).toUpperCase() + prop.slice(1),
       props = (prop + ' ' + cssomPrefixes.join(ucProp + ' ') + ucProp).split(' ');
 
     // did they call .prefixed('boxSizing') or are we just testing a prop?
@@ -1101,7 +1087,7 @@ When used on an `<a>`, this attribute signifies that the resource it points to s
 
       // otherwise, they called .prefixed('requestAnimationFrame', window[, elem])
     } else {
-      props = (prop + ' ' + (domPrefixes).join(ucProp + ' ') + ucProp).split(' ');
+      props = (prop + ' ' + domPrefixes.join(ucProp + ' ') + ucProp).split(' ');
       return testDOMProps(props, prefixed, elem);
     }
   }
@@ -1113,7 +1099,6 @@ When used on an `<a>`, this attribute signifies that the resource it points to s
   // Modernizr.testAllProps('boxSizing')
   ModernizrProto.testAllProps = testPropsAll;
 
-  
 
   /**
    * prefixed returns the prefixed or nonprefixed property name variant of your input
@@ -1180,7 +1165,7 @@ When used on an `<a>`, this attribute signifies that the resource it points to s
    * If you want a similar lookup, but in kebab-case, you can use [prefixedCSS](#modernizr-prefixedcss).
    */
 
-  var prefixed = ModernizrProto.prefixed = function(prop, obj, elem) {
+  const prefixed = ModernizrProto.prefixed = function (prop, obj, elem) {
     if (prop.indexOf('@') === 0) {
       return atRule(prop);
     }
@@ -1197,8 +1182,8 @@ When used on an `<a>`, this attribute signifies that the resource it points to s
     }
   };
 
-  
-/*!
+
+  /*!
 {
   "name": "Fullscreen API",
   "property": "fullscreen",
@@ -1210,8 +1195,8 @@ When used on an `<a>`, this attribute signifies that the resource it points to s
   "polyfills": ["screenfulljs"],
   "builderAliases": ["fullscreen_api"]
 }
-!*/
-/* DOC
+! */
+  /* DOC
 Detects support for the ability to make the current website take over the user's entire screen
 */
 
@@ -1260,8 +1245,8 @@ Detects support for the ability to make the current website take over the user's
     return testPropsAll(prop, undefined, undefined, value, skipValueTest);
   }
   ModernizrProto.testAllProps = testAllProps;
-  
-/*!
+
+  /*!
 {
   "name": "CSS Animations",
   "property": "cssanimations",
@@ -1274,23 +1259,23 @@ Detects support for the ability to make the current website take over the user's
     "href": "https://goo.gl/OGw5Gm"
   }]
 }
-!*/
-/* DOC
+! */
+  /* DOC
 Detects whether or not elements can be animated using CSS
 */
 
   Modernizr.addTest('cssanimations', testAllProps('animationName', 'a', true));
 
-/*!
+  /*!
 {
   "name": "CSS Transforms",
   "property": "csstransforms",
   "caniuse": "transforms2d",
   "tags": ["css"]
 }
-!*/
+! */
 
-  Modernizr.addTest('csstransforms', function() {
+  Modernizr.addTest('csstransforms', function () {
     // Android < 3.0 is buggy, so we sniff and blacklist
     // http://git.io/hHzL7w
     return navigator.userAgent.indexOf('Android 2.') === -1 &&
@@ -1308,14 +1293,12 @@ Detects whether or not elements can be animated using CSS
   delete ModernizrProto.addAsyncTest;
 
   // Run the things that are supposed to run after the tests
-  for (var i = 0; i < Modernizr._q.length; i++) {
+  for (let i = 0; i < Modernizr._q.length; i++) {
     Modernizr._q[i]();
   }
 
   // Leak Modernizr namespace
   window.Modernizr = Modernizr;
 
-
-;
 
 })(window, document);
