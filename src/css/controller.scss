@@ -389,7 +389,7 @@
                 }
                 &.dplayer-setting-box-narrow {
                     width: 70px;
-                    height: 180px;
+                    // height: 180px;
                     text-align: center;
                 }
                 &.dplayer-setting-box-speed {
@@ -400,8 +400,17 @@
                         display: block;
                     }
                 }
+                &.dplayer-setting-box-channel {
+                    .dplayer-setting-origin-panel {
+                        display: none;
+                    }
+                    .dplayer-setting-channel-panel {
+                        display: block;
+                    }
+                }
             }
             .dplayer-setting-item,
+            .dplayer-setting-channel-item,
             .dplayer-setting-speed-item {
                 height: 30px;
                 padding: 5px 10px;

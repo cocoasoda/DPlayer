@@ -137,6 +137,10 @@
                         <span class="dplayer-label">{{ tran('Speed') }}</span>
                         <div class="dplayer-toggle">{{@ icons.right }}</div>
                     </div>
+                    <div class="dplayer-setting-item dplayer-setting-channel">
+                        <span class="dplayer-label">{{ tran('Channel') }}</span>
+                        <div class="dplayer-toggle">{{@ icons.right }}</div>
+                    </div>
                     <div class="dplayer-setting-item dplayer-setting-loop">
                         <span class="dplayer-label">{{ tran('Loop') }}</span>
                         <div class="dplayer-toggle">
@@ -187,6 +191,17 @@
                     </div>
                     <div class="dplayer-setting-speed-item" data-speed="2">
                         <span class="dplayer-label">2</span>
+                    </div>
+                </div>
+                <div class="dplayer-setting-channel-panel">
+                    <div class="dplayer-setting-channel-item" data-channel="Public">
+                        <span class="dplayer-label">{{ tran('Public') }}</span>
+                    </div>
+                    <div class="dplayer-setting-channel-item" data-channel="Friends">
+                        <span class="dplayer-label">{{ tran('Friends') }}</span>
+                    </div>
+                    <div class="dplayer-setting-channel-item" data-channel="Group">
+                        <span class="dplayer-label">{{ tran('Group') }}</span>
                     </div>
                 </div>
             </div>

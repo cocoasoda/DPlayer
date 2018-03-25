@@ -73,7 +73,19 @@ class Setting {
         this.hide();
       });
     }
-
+    // channel
+    this.player.template.channel.addEventListener('click', () => {
+      this.player.template.settingBox.classList.add('dplayer-setting-box-narrow');
+      this.player.template.settingBox.classList.add('dplayer-setting-box-channel');
+    });
+    for (let i = 0; i < this.player.template.channelItem.length; i++) {
+      this.player.template.channelItem[i].addEventListener('click', () => {
+        console.log(this, this.player.danmaku.options);
+        this.player.channel(this.player.template.channelItem[i].dataset.channel);
+        // this.player.reloadDanmaku();
+        this.hide();
+      });
+    }
     // danmaku opacity
     if (this.player.danmaku) {
       const dWidth = 130;
@@ -117,6 +129,7 @@ class Setting {
     setTimeout(() => {
       this.player.template.settingBox.classList.remove('dplayer-setting-box-narrow');
       this.player.template.settingBox.classList.remove('dplayer-setting-box-speed');
+      this.player.template.settingBox.classList.remove('dplayer-setting-box-channel');
     }, 300);
 
     this.player.controller.disableAutoHide = false;

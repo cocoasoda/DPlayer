@@ -40,6 +40,7 @@ class DPlayer {
       this.quality = this.options.video.quality[this.options.video.defaultQuality];
     }
     this.tran = new i18n(this.options.lang).tran;
+    // this.channel = this.options.channel;
     this.events = new Events();
     this.user = new User(this);
     this.container = this.options.container;
@@ -93,6 +94,7 @@ class DPlayer {
         error: (msg) => {
           this.notice(msg);
         },
+        channel: this.options.channel,
         apiBackend: this.options.apiBackend,
         borderColor: this.options.theme,
         height: this.arrow ? 24 : 30,
@@ -352,7 +354,7 @@ class DPlayer {
           }
           break;
 
-          // https://github.com/Bilibili/flv.js
+        // https://github.com/Bilibili/flv.js
         case 'flv':
           if (flvjs && flvjs.isSupported()) {
             if (flvjs.isSupported()) {
@@ -372,7 +374,7 @@ class DPlayer {
           }
           break;
 
-          // https://github.com/Dash-Industry-Forum/dash.js
+        // https://github.com/Dash-Industry-Forum/dash.js
         case 'dash':
           if (dashjs) {
             dashjs.MediaPlayer().create().initialize(video, video.src, false);
@@ -382,7 +384,7 @@ class DPlayer {
           }
           break;
 
-          // https://github.com/webtorrent/webtorrent
+        // https://github.com/webtorrent/webtorrent
         case 'webtorrent':
           if (WebTorrent) {
             if (WebTorrent.WEBRTC_SUPPORT) {
@@ -552,7 +554,13 @@ class DPlayer {
   speed(rate) {
     this.video.playbackRate = rate;
   }
+  channel(ch) {
+    this.danmaku.reload(null, ch);
+  }
 
+  // reloadDanmaku() {
+  //   this.danmaku.reload(this.danmaku.options.api);
+  // }
   destroy() {
     instances.splice(instances.indexOf(this), 1);
     this.pause();

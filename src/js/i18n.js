@@ -57,6 +57,10 @@ const tranTxt = {
     'Volume': '音量',
     'Live': '直播',
     'Video info': '视频统计信息',
+    'Channel': '频道',
+    'Public': '公开',
+    'Group': '小组',
+    'Friends': '好友',
   },
   "zh-tw" : {
     'Danmaku is loading': '彈幕加載中',

@@ -13,6 +13,7 @@ class Danmaku {
     this._opacity = this.options.opacity;
     this.events = this.options.events;
     this.unlimited = this.options.unlimited;
+    this.channel = this.options.channel;
     this._measure('');
 
     this.load();
@@ -42,10 +43,14 @@ class Danmaku {
     });
   }
 
-  reload(newAPI) {
-    this.options.api = newAPI;
+  reload(newAPI, newChannel) {
+    // const prevChannel = this.options.channel;
+    this.options.api = newAPI || this.options.api;
     this.dan = [];
     this.clear();
+    if (newChannel) {
+      this.channel = this.options.channel = newChannel;
+    }
     this.load();
   }
 
