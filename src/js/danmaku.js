@@ -14,6 +14,7 @@ class Danmaku {
     this.events = this.options.events;
     this.unlimited = this.options.unlimited;
     this.channel = this.options.channel;
+    this.latest = 0;
     this._measure('');
 
     this.load();
@@ -21,11 +22,12 @@ class Danmaku {
 
   load() {
     let apiurl;
+    const ch = this.channel.toLowerCase() || 'public';
     if (this.options.api.maximum) {
-      apiurl = `${this.options.api.address}v2/?id=${this.options.api.id}&max=${this.options.api.maximum}`;
+      apiurl = `${this.options.api.address}${this.options.api.id}/${ch}&max=${this.options.api.maximum}`;
     }
     else {
-      apiurl = `${this.options.api.address}v2/?id=${this.options.api.id}`;
+      apiurl = `${this.options.api.address}${this.options.api.id}/${ch}`;
     }
     const endpoints = (this.options.api.addition || []).slice(0);
     endpoints.push(apiurl);
@@ -42,7 +44,30 @@ class Danmaku {
       this.events && this.events.trigger('danmaku_load_end');
     });
   }
+  loadLatest() {
+    let apiurl;
+    const ch = this.channel.toLowerCase() || 'public';
+    if (this.options.api.maximum) {
+      apiurl = `${this.options.api.address}${this.options.api.id}/${ch}&max=${this.options.api.maximum}&latest=${this.latest}`;
+    }
+    else {
+      apiurl = `${this.options.api.address}${this.options.api.id}/${ch}&latest=${this.latest}`;
+    }
+    const endpoints = (this.options.api.addition || []).slice(0);
+    endpoints.push(apiurl);
+    this.events && this.events.trigger('danmaku_load_latest_start', endpoints);
 
+    this._readAllEndpoints(endpoints, (results) => {
+      this.dan = this.dan.concat(results).sort((a, b) => a.time - b.time);
+      window.requestAnimationFrame(() => {
+        this.frame();
+      });
+
+      this.options.callback();
+
+      this.events && this.events.trigger('danmaku_load_latest_end');
+    });
+  }
   reload(newAPI, newChannel) {
     // const prevChannel = this.options.channel;
     this.options.api = newAPI || this.options.api;
