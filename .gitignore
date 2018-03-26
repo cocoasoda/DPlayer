@@ -4,3 +4,6 @@ demo2
 npm-debug.log
 DPlayer.log*
 wxw
+dist
+package-lock.json
+yarn.lock
